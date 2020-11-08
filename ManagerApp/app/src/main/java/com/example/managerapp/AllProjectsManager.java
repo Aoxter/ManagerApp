@@ -9,8 +9,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-public class FileManager {
-    public static final String FILENAME = "projects_data.dat";
+public class AllProjectsManager {
+    private static final String FILENAME = "projects_data.dat";
     public static void writeProjectsLists(ArrayList<String> items, Context context){
 
         try {

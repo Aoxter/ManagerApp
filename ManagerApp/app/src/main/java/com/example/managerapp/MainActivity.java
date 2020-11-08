@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonNewProject = findViewById(R.id.buttonNewProject);
         listViewProjects = findViewById(R.id.projectsList);
 
-        listProjects = FileManager.readProjectsList(this);
+        listProjects = AllProjectsManager.readProjectsList(this);
         adapterProjects = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listProjects);
         listViewProjects.setAdapter(adapterProjects);
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 listProjects.remove(position);
                 adapterProjects.notifyDataSetChanged();
-                FileManager.writeProjectsLists(listProjects, getApplicationContext());
+                AllProjectsManager.writeProjectsLists(listProjects, getApplicationContext());
                 Toast.makeText(getApplicationContext(), "Deleted project", Toast.LENGTH_SHORT).show();
                 return false;
             }
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String itemEntered = editNewProject.getText().toString();
                 adapterProjects.add(itemEntered);
                 editNewProject.setText("");
-                FileManager.writeProjectsLists(listProjects, this);
+                AllProjectsManager.writeProjectsLists(listProjects, this);
                 Toast.makeText(this, "Project added", Toast.LENGTH_SHORT).show();
                 break;
             }
