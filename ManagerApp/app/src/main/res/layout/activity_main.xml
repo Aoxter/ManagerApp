@@ -53,7 +53,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Projects List"
-                android:textColor="#673AB7"
+                android:textColor="#6031B3"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Project Info"
-                android:textColor="#673AB7"
+                android:textColor="#6031B3"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -89,7 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="To begin tasks"
-                android:textColor="#3F51B5"
+                android:textColor="#FF9800"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -121,7 +121,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add task" />
+                    android:text="Add task"
+                    app:backgroundTint="#FF9800" />
             </LinearLayout>
 
             <ListView
@@ -136,7 +137,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="In work tasts"
-                android:textColor="#3F51B5"
+                android:textColor="#8BC34A"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -168,7 +169,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add task" />
+                    android:text="Add task"
+                    app:backgroundTint="#8BC34A" />
             </LinearLayout>
 
             <ListView
@@ -183,7 +185,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="In testing tasks"
-                android:textColor="#3F51B5"
+                android:textColor="#F44336"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -215,7 +217,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add task" />
+                    android:text="Add task"
+                    app:backgroundTint="#F44336" />
             </LinearLayout>
 
             <ListView
@@ -230,7 +233,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Finished tasts"
-                android:textColor="#3F51B5"
+                android:textColor="#247DC5"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -262,7 +265,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Add task" />
+                    android:text="Add task"
+                    app:backgroundTint="#247DC5" />
             </LinearLayout>
 
             <ListView

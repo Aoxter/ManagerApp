@@ -226,24 +226,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // To Do
         listViewToDo.setAdapter(null);
         listToDo = PerProject.readDataProjectToDo(this, this.projectName);
-        adapterToDo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listToDo);
+        adapterToDo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listToDo)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
+                }
+                return view;
+            }
+        };
         listViewToDo.setAdapter(adapterToDo);
         // In Work
         listViewInWork.setAdapter(null);
         listInWork = PerProject.readDataProjectInWork(this, this.projectName);
-        adapterInWork = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInWork);
+        adapterInWork = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInWork)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
+                }
+                return view;
+            }
+        };
         listViewInWork.setAdapter(adapterInWork);
         Toast.makeText(this, "Loaded project: "+this.projectName, Toast.LENGTH_SHORT).show();
         //Testing
         listViewTest.setAdapter(null);
         listTest = PerProject.readDataProjectTesting(this, this.projectName);
-        adapterTest = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listTest);
+        adapterTest = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listTest)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+                }
+                return view;
+            }
+        };
         listViewTest.setAdapter(adapterTest);
         Toast.makeText(this, "Loaded project: "+this.projectName, Toast.LENGTH_SHORT).show();
         //Finished
         listViewFinished.setAdapter(null);
         listFinished = PerProject.readDataProjectFinished(this, this.projectName);
-        adapterFinished = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listFinished);
+        adapterFinished = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listFinished)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
+                }
+                return view;
+            }
+        };
         listViewFinished.setAdapter(adapterFinished);
         Toast.makeText(this, "Loaded project: "+this.projectName, Toast.LENGTH_SHORT).show();
     }
