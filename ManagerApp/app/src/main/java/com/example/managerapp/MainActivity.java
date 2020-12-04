@@ -1,22 +1,22 @@
 package com.example.managerapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.google.android.gms.ads.AdListener;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.formats.NativeAdOptions;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
@@ -90,7 +90,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listViewProjects = findViewById(R.id.projectsList);
 
         listProjects = AllProjectsManager.readProjectsList(this);
-        adapterProjects = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listProjects);
+        adapterProjects = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listProjects)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
+                }
+                return view;
+            }
+        };
         listViewProjects.setAdapter(adapterProjects);
 
         buttonNewProject.setOnClickListener(this);
@@ -102,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 adapterProjects.notifyDataSetChanged();
                 AllProjectsManager.writeProjectsLists(listProjects, getApplicationContext());
                 Toast.makeText(getApplicationContext(), "Deleted project", Toast.LENGTH_SHORT).show();
+                listViewInWork.setAdapter(null);
+                listViewToDo.setAdapter(null);
+                listViewTest.setAdapter(null);
+                listViewFinished.setAdapter(null);
                 return false;
             }
         });
@@ -156,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String name = editName1.getText().toString();
                 adapterToDo.add(task + " - " + name);
                 editToDo.setText("");
+                editName1.setText("");
                 PerProject.writeDataProjectToDo(listToDo, this, this.projectName);
                 Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                 break;
@@ -167,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String name = editName2.getText().toString();
                 adapterInWork.add(task + " - " + name);
                 editInWork.setText("");
+                editName2.setText("");
                 PerProject.writeDataProjectInWork(listInWork, this, this.projectName);
                 Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                 break;
@@ -178,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String name = editName3.getText().toString();
                     adapterTest.add(task + " - " + name);
                     editTest.setText("");
+                    editName3.setText("");
                     PerProject.writeDataProjectTesting(listTest, this, this.projectName);
                     Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                     break;
@@ -189,6 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String name = editName4.getText().toString();
                     adapterFinished.add(task + " - " + name);
                     editFinished.setText("");
+                    editName4.setText("");
                     PerProject.writeDataProjectFinished(listFinished, this, this.projectName);
                     Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                     break;
