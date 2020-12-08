@@ -22,6 +22,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -35,7 +36,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     public String projectName = "";
     private Boolean chosen = Boolean.FALSE;
-    private Boolean canAddProject = Boolean.FALSE;
     private RewardedAd rewardedAd;
     // New Project
     private EditText editNewProject;
@@ -190,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.buttonNewProject: {
-                canAddProject = Boolean.FALSE;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setCancelable(true);
                 builder.setTitle("New project");
@@ -417,7 +416,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onUserEarnedReward(@NonNull RewardItem reward) {
                     // User earned reward.
-                    canAddProject = Boolean.TRUE;
                     String itemEntered = editNewProject.getText().toString();
                     adapterProjects.add(itemEntered);
                     editNewProject.setText("");
@@ -433,9 +431,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             rewardedAd.show(activityContext, adCallback);
         } else {
             Log.d("TAG", "The rewarded ad wasn't loaded yet.");
-        }
-        if(canAddProject == Boolean.TRUE){
-
         }
 
     }
