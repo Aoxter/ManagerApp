@@ -17,12 +17,14 @@
             android:orientation="vertical" >
 
             <!--AD BANNER-->
+            <!--ca-app-pub-3940256099942544/6300978111 - test unit-->
+            <!--ca-app-pub-5947679658512901/5896325361 - our unit-->
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 ads:adSize="BANNER"
-                ads:adUnitId="ca-app-pub-5947679658512901/1565262339">
+                ads:adUnitId="ca-app-pub-5947679658512901/5896325361">
             </com.google.android.gms.ads.AdView>
 
             <LinearLayout
@@ -68,6 +70,14 @@
                 android:layout_height="259dp" >
 
             </ListView>
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                ads:adSize="BANNER"
+                ads:adUnitId="ca-app-pub-5947679658512901/6966121615">
+            </com.google.android.gms.ads.AdView>
 
             <TextView
                 android:id="@+id/textProjectInfo"
@@ -261,6 +271,14 @@
                 android:layout_height="200dp">
 
             </ListView>
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                ads:adSize="BANNER"
+                ads:adUnitId="ca-app-pub-5947679658512901/6683066499">
+            </com.google.android.gms.ads.AdView>
 
         </LinearLayout>
     </ScrollView>

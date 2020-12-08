@@ -1,8 +1,14 @@
 package com.example.managerapp;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,21 +16,30 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.AdLoader;
 import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     public String projectName = "";
     private Boolean chosen = Boolean.FALSE;
+    private Boolean canAddProject = Boolean.FALSE;
+    private RewardedAd rewardedAd;
     // New Project
     private EditText editNewProject;
     private Button buttonNewProject;
@@ -68,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // ---------- ADMOB AND ADS ----------
         // AdMob initialize
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -76,14 +91,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         //Banner AD
-        //AddView
+        //AdView
         AdView adView = (AdView)findViewById(R.id.adView);
         //Build a request
         AdRequest adRequest = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
                 .build();
-        //Load an add
+        //Load an ad
         adView.loadAd(adRequest);
+
+        //Reward Ad
+        rewardedAd = new RewardedAd(this, "ca-app-pub-5947679658512901/5708880264");
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(LoadAdError adError) {
+                // Ad failed to load.
+            }
+        };
+        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+        // ---------- END ----------
+
         // New Project
         editNewProject = findViewById(R.id.editProjectName);
         buttonNewProject = findViewById(R.id.buttonNewProject);
@@ -143,11 +175,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.buttonNewProject: {
-                String itemEntered = editNewProject.getText().toString();
-                adapterProjects.add(itemEntered);
-                editNewProject.setText("");
-                AllProjectsManager.writeProjectsLists(listProjects, this);
-                Toast.makeText(this, "Project added", Toast.LENGTH_SHORT).show();
+                canAddProject = Boolean.FALSE;
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setCancelable(true);
+                builder.setTitle("New project");
+                builder.setMessage("Do you want to view the ad to create a new project");
+                builder.setPositiveButton("Confirm",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                createProject(v.getContext());
+                            }
+                        });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
                 break;
             }
             case R.id.buttonToDo: {
@@ -256,5 +303,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         return false;
+    }
+
+    // load new rewarded ad after previous one end
+    public RewardedAd createAndLoadRewardedAd() {
+        RewardedAd rewardedAd = new RewardedAd(this,
+                "ca-app-pub-3940256099942544/5224354917");
+        RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
+            @Override
+            public void onRewardedAdLoaded() {
+                // Ad successfully loaded.
+            }
+
+            @Override
+            public void onRewardedAdFailedToLoad(LoadAdError adError) {
+                // Ad failed to load.
+            }
+        };
+        rewardedAd.loadAd(new AdRequest.Builder().build(), adLoadCallback);
+        return rewardedAd;
+    }
+
+    public void createProject(Context context){
+        if (rewardedAd.isLoaded()) {
+            Activity activityContext = MainActivity.this;
+            RewardedAdCallback adCallback = new RewardedAdCallback() {
+                @Override
+                public void onRewardedAdOpened() {
+                    // Ad opened.
+                }
+
+                @Override
+                public void onRewardedAdClosed() {
+                    // Ad closed.
+                    rewardedAd = createAndLoadRewardedAd();
+                }
+
+                @Override
+                public void onUserEarnedReward(@NonNull RewardItem reward) {
+                    // User earned reward.
+                    canAddProject = Boolean.TRUE;
+                    String itemEntered = editNewProject.getText().toString();
+                    adapterProjects.add(itemEntered);
+                    editNewProject.setText("");
+                    AllProjectsManager.writeProjectsLists(listProjects, context);
+                    //Toast.makeText(this, "Project added", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onRewardedAdFailedToShow(AdError adError) {
+                    // Ad failed to display.
+                }
+            };
+            rewardedAd.show(activityContext, adCallback);
+        } else {
+            Log.d("TAG", "The rewarded ad wasn't loaded yet.");
+        }
+        if(canAddProject == Boolean.TRUE){
+
+        }
+
     }
 }
