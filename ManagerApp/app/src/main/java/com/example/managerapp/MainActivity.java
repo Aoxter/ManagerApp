@@ -3,29 +3,26 @@ package com.example.managerapp;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.google.android.gms.ads.AdError;
 import com.google.android.gms.ads.AdListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.formats.NativeAdOptions;
-import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
@@ -122,7 +119,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listViewProjects = findViewById(R.id.projectsList);
 
         listProjects = AllProjectsManager.readProjectsList(this);
-        adapterProjects = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listProjects);
+        adapterProjects = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listProjects)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
+                }
+                return view;
+            }
+        };
         listViewProjects.setAdapter(adapterProjects);
 
         buttonNewProject.setOnClickListener(this);
@@ -134,6 +145,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 adapterProjects.notifyDataSetChanged();
                 AllProjectsManager.writeProjectsLists(listProjects, getApplicationContext());
                 Toast.makeText(getApplicationContext(), "Deleted project", Toast.LENGTH_SHORT).show();
+                listViewInWork.setAdapter(null);
+                listViewToDo.setAdapter(null);
+                listViewTest.setAdapter(null);
+                listViewFinished.setAdapter(null);
                 return false;
             }
         });
@@ -203,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String name = editName1.getText().toString();
                 adapterToDo.add(task + " - " + name);
                 editToDo.setText("");
+                editName1.setText("");
                 PerProject.writeDataProjectToDo(listToDo, this, this.projectName);
                 Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                 break;
@@ -214,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String name = editName2.getText().toString();
                 adapterInWork.add(task + " - " + name);
                 editInWork.setText("");
+                editName2.setText("");
                 PerProject.writeDataProjectInWork(listInWork, this, this.projectName);
                 Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                 break;
@@ -225,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String name = editName3.getText().toString();
                     adapterTest.add(task + " - " + name);
                     editTest.setText("");
+                    editName3.setText("");
                     PerProject.writeDataProjectTesting(listTest, this, this.projectName);
                     Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                     break;
@@ -236,6 +254,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String name = editName4.getText().toString();
                     adapterFinished.add(task + " - " + name);
                     editFinished.setText("");
+                    editName4.setText("");
                     PerProject.writeDataProjectFinished(listFinished, this, this.projectName);
                     Toast.makeText(this, "Task added", Toast.LENGTH_SHORT).show();
                     break;
@@ -251,24 +270,80 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // To Do
         listViewToDo.setAdapter(null);
         listToDo = PerProject.readDataProjectToDo(this, this.projectName);
-        adapterToDo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listToDo);
+        adapterToDo = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listToDo)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_orange_dark));
+                }
+                return view;
+            }
+        };
         listViewToDo.setAdapter(adapterToDo);
         // In Work
         listViewInWork.setAdapter(null);
         listInWork = PerProject.readDataProjectInWork(this, this.projectName);
-        adapterInWork = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInWork);
+        adapterInWork = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listInWork)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_green_dark));
+                }
+                return view;
+            }
+        };
         listViewInWork.setAdapter(adapterInWork);
         Toast.makeText(this, "Loaded project: "+this.projectName, Toast.LENGTH_SHORT).show();
         //Testing
         listViewTest.setAdapter(null);
         listTest = PerProject.readDataProjectTesting(this, this.projectName);
-        adapterTest = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listTest);
+        adapterTest = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listTest)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_red_dark));
+                }
+                return view;
+            }
+        };
         listViewTest.setAdapter(adapterTest);
         Toast.makeText(this, "Loaded project: "+this.projectName, Toast.LENGTH_SHORT).show();
         //Finished
         listViewFinished.setAdapter(null);
         listFinished = PerProject.readDataProjectFinished(this, this.projectName);
-        adapterFinished = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listFinished);
+        adapterFinished = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listFinished)
+        {
+            @NonNull
+            @Override
+            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (position % 2 ==1 ){
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_light));
+                }
+                else{
+                    view.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
+                }
+                return view;
+            }
+        };
         listViewFinished.setAdapter(adapterFinished);
         Toast.makeText(this, "Loaded project: "+this.projectName, Toast.LENGTH_SHORT).show();
     }
