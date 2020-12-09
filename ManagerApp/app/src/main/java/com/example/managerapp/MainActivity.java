@@ -97,6 +97,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Load an ad
         adView.loadAd(adRequest);
 
+        AdView adView2 = (AdView) findViewById(R.id.adView2);
+        AdRequest adRequest2 = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView2.loadAd(adRequest2);
+
+        AdView adView3 = (AdView) findViewById(R.id.adView3);
+        AdRequest adRequest3 = new AdRequest.Builder()
+                .setRequestAgent("android_studio:ad_template").build();
+        adView3.loadAd(adRequest3);
+
         //Reward Ad
         rewardedAd = new RewardedAd(this, "ca-app-pub-5947679658512901/5708880264");
         RewardedAdLoadCallback adLoadCallback = new RewardedAdLoadCallback() {
